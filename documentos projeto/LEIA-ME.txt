@@ -1,5 +1,6 @@
 Esta pasta contém arquivos referentes ao planejamento do projeto em questão.
 Contém os seguintes arquivos:
--P2-ControleSociosClube
--PGP02
--TDA02
+-P2-ControleSociosClube.docx
+-PGP02.odt
+-TDA02.odt
+-CHKLIST02.ods
