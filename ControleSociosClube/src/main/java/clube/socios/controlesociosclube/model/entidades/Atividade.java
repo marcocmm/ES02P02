@@ -9,6 +9,6 @@ package clube.socios.controlesociosclube.model.entidades;
  *
  * @author romulo
  */
-public class atividade {
-    
+public enum Atividade {
+    ACADEMIA, DANCA, EQUITACAO, WINDSURFE;
 }

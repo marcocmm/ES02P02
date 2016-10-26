@@ -5,10 +5,16 @@
  */
 package clube.socios.controlesociosclube.model.DAO;
 
+import clube.socios.controlesociosclube.model.entidades.Socio;
+
 /**
  *
  * @author romulo
  */
-public class SocioDAO {
-    
+public class SocioDAO extends GenericDAO<Socio> {
+
+    public SocioDAO() {
+        super(Socio.class);
+    }
+
 }

@@ -10,5 +10,12 @@ package clube.socios.controlesociosclube.model.DAO.Serviços;
  * @author romulo
  */
 public class SicronizaDados {
-    
+
+    public void updateSocios() {
+        throw new UnsupportedOperationException();
+    }
+
+    public void updateCheckins() {
+        throw new UnsupportedOperationException();
+    }
 }

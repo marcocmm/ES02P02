@@ -10,5 +10,12 @@ package clube.socios.controlesociosclube.model.entidades;
  * @author romulo
  */
 public class Unidade {
+
+    private int idUnidade;
+    private String nome;
+    private String cidade;
+
+    get;
+    set;
     
 }

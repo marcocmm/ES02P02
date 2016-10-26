@@ -5,10 +5,22 @@
  */
 package clube.socios.controlesociosclube.model.DAO;
 
+import java.io.Serializable;
+
 /**
  *
  * @author romulo
  */
-public class Checkin {
-    
+public class Checkin implements Serializable {
+
+    private int quantidadeDeCheckin;
+
+    public void addQuantidadeDeCheckin() {
+        quantidadeDeCheckin++;
+    }
+
+    public int getQuantidadeDeCheckin() {
+        return quantidadeDeCheckin;
+    }
+
 }

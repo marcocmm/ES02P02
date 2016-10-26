@@ -9,6 +9,6 @@ package clube.socios.controlesociosclube.model.entidades;
  *
  * @author romulo
  */
-public class Sexo {
-    
+public enum Sexo {
+    MASCULINO, FEMININO;
 }

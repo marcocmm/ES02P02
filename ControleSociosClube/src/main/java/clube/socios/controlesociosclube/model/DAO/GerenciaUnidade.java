@@ -5,10 +5,26 @@
  */
 package clube.socios.controlesociosclube.model.DAO;
 
+import clube.socios.controlesociosclube.model.entidades.Unidade;
+import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.Collection;
+
 /**
  *
  * @author romulo
  */
-public class GerenciaUnidade {
-    
+public class GerenciaUnidade implements Serializable {
+
+    private final Collection<Checkin> checkins;
+    private Unidade unidade;
+
+    public GerenciaUnidade() {
+        this.checkins = new ArrayList<>();
+    }
+
+    ?;
+    public boolean serializaCheckins(Collection checkins) {
+        throw new UnsupportedOperationException();
+    }
 }
