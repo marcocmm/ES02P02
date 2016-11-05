@@ -9,6 +9,8 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collection;
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 
 /**
@@ -19,7 +21,8 @@ import javax.persistence.Id;
 public class Socio implements Serializable {
 
     @Id
-    private final int idSocio;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private int idSocio;
     private String nome;
     private final String cpf;
     private int idade;
@@ -30,7 +33,6 @@ public class Socio implements Serializable {
     private final Collection<Atividade> atividades;
 
     protected Socio() {
-        this.idSocio = 0;
         this.cpf = null;
         this.dependentes = null;
         this.unidades = null;
@@ -39,7 +41,6 @@ public class Socio implements Serializable {
     }
 
     public Socio(String cpf, String nome, int idade, Sexo sexo, Collection<Unidade> unidades, Collection<Atividade> atividades) {
-        this.idSocio = 1;
         this.cpf = cpf;
         this.nome = nome;
         this.idade = idade;

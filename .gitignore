@@ -4,3 +4,5 @@
 /deploy/ControleSociosClube/target/
 /deploy/SociosDB/target/
 /deploy/SociosDB/nbproject/
+/deploy/SociosCore/nbproject/private/
+/deploy/SociosCore/target/
