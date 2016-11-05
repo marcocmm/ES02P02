@@ -6,12 +6,9 @@
 package clube.socios.controlesociosclube.model.BO;
 
 //import clube.socios.controlesociosclube.db.SocioDAO;
+import clube.socios.controlesociosclube.model.DAO.Endpoint;
 import clube.socios.controlesociosclube.model.entidades.Socio;
 import java.io.IOException;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
-import java.net.InetAddress;
-import java.net.Socket;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -34,47 +31,18 @@ public class SocioBO {
     }
 
     public static void gravaSocio(Socio socio) {
-        sendObject(socio);
-    }
-
-    private static Object retrieveObject(String whichObject) {
-        Object response = null;
         try {
-            Socket socket = new Socket(InetAddress.getByName("localhost"), 10000);
-
-            ObjectInputStream inputStream = new ObjectInputStream(socket.getInputStream());
-            ObjectOutputStream outputStream = new ObjectOutputStream(socket.getOutputStream());
-
-            outputStream.flush();
-            outputStream.writeObject(whichObject);
-
-            response = inputStream.readObject();
-
-            inputStream.close();
-            outputStream.close();
-            socket.close();
+            Socio retrieveObject = (Socio) Endpoint.retrieveObject(socio.getCpf());
+            if (retrieveObject == null) {
+                Endpoint.sendObject(socio);
+            }
         } catch (IOException ex) {
-            Logger.getLogger(SocioBO.class.getName()).log(Level.SEVERE, null, ex);
+            System.err.println("Conexao perdida");
+            SerializePersistence persistence = new SerializePersistence();
+            persistence.create(socio);
         } catch (ClassNotFoundException ex) {
             Logger.getLogger(SocioBO.class.getName()).log(Level.SEVERE, null, ex);
-        } finally {
-            return response;
         }
     }
 
-    private static void sendObject(Object request) {
-        try {
-            Socket socket = new Socket(InetAddress.getByName("localhost"), 10000);
-
-            ObjectOutputStream outputStream = new ObjectOutputStream(socket.getOutputStream());
-
-            outputStream.flush();
-            outputStream.writeObject(request);
-
-            outputStream.close();
-            socket.close();
-        } catch (IOException ex) {
-            Logger.getLogger(SocioBO.class.getName()).log(Level.SEVERE, null, ex);
-        }
-    }
 }

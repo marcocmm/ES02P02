@@ -5,9 +5,12 @@
  */
 package clube.socios.controlesociosclube.model.view;
 
+import clube.socios.controlesociosclube.model.DAO.Serviços.SincronizaDados;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.Timer;
+import java.util.TimerTask;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
@@ -45,6 +48,14 @@ public class Main extends JFrame {
     }
 
     public static void main(String[] args) {
+        SincronizaDados sincronizaDados = new SincronizaDados();
+        Timer timer = new Timer();
+        timer.schedule(new TimerTask() {
+            @Override
+            public void run() {
+                sincronizaDados.updateSocios();
+            }
+        }, 0, 60000);
         new Main();
     }
 }

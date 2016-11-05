@@ -17,4 +17,9 @@ public class SocioDAO extends GenericDAO<Socio> {
         super(Socio.class);
     }
 
+    public Socio obter(String cpf) {
+        super.entityManager.clear();
+        return (Socio) entityManager.find(clazz, cpf);
+    }
+
 }

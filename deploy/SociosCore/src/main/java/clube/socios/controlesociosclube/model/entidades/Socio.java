@@ -63,6 +63,10 @@ public class Socio implements Serializable {
         this.atividades = atividades;
     }
 
+    public String getCpf() {
+        return cpf;
+    }
+
     public void setNome(String nome) {
         this.nome = nome;
     }
@@ -101,6 +105,18 @@ public class Socio implements Serializable {
 
     public Collection<Mensalidade> getMensalidades() {
         return mensalidades;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (obj == null) {
+            return false;
+        }
+        if (!(obj instanceof Socio)) {
+            return false;
+        }
+        Socio socio = (Socio) obj;
+        return this.cpf.equals(socio.cpf);
     }
 
 }

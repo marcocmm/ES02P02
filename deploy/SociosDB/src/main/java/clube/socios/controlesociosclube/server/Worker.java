@@ -14,9 +14,10 @@ public class Worker implements Runnable {
     private ObjectInputStream inputStream;
     private ObjectOutputStream outputStream;
     private Socket clientSocket;
-    private final SocioDAO socioDAO = new SocioDAO();
+    private final SocioDAO socioDAO;
 
     public Worker(Socket clientSocket) {
+        this.socioDAO = new SocioDAO();
         try {
             this.clientSocket = clientSocket;
             this.outputStream = new ObjectOutputStream(this.clientSocket.getOutputStream());
@@ -33,12 +34,15 @@ public class Worker implements Runnable {
             request = inputStream.readObject();
 
             if (request instanceof String) {
+                Object response = null;
                 String requestString = (String) request;
                 if (requestString.equals("list")) {
-                    Collection<Socio> list = socioDAO.list();
-                    outputStream.flush();
-                    outputStream.writeObject(list);
+                    response = socioDAO.list();
+                } else {
+                    response = socioDAO.obter(requestString);
                 }
+                outputStream.flush();
+                outputStream.writeObject(response);
             } else if (request instanceof Socio) {
                 socioDAO.update((Socio) request);
             }

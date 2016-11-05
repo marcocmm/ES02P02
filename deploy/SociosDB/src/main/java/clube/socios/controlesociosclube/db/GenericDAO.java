@@ -15,8 +15,8 @@ import javax.persistence.Persistence;
  */
 public class GenericDAO<T> {
 
-    private final EntityManager entityManager;
-    private final Class clazz;
+    final EntityManager entityManager;
+    final Class clazz;
 
     public GenericDAO(Class clazz) {
         entityManager = Persistence.createEntityManagerFactory("SociosPU").createEntityManager();
