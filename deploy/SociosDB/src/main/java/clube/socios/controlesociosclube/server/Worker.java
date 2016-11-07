@@ -7,8 +7,13 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
-import java.util.Collection;
+import javax.persistence.NoResultException;
 
+/**
+ * Thread que obtem a requisiçao de um clinte e produz a resposta.
+ *
+ * @author romulo
+ */
 public class Worker implements Runnable {
 
     private ObjectInputStream inputStream;
@@ -16,6 +21,11 @@ public class Worker implements Runnable {
     private Socket clientSocket;
     private final SocioDAO socioDAO;
 
+    /**
+     * Constroi o objeto dado uma conexao com o cliente.
+     *
+     * @param clientSocket
+     */
     public Worker(Socket clientSocket) {
         this.socioDAO = new SocioDAO();
         try {
@@ -27,6 +37,9 @@ public class Worker implements Runnable {
         }
     }
 
+    /**
+     * Obtem a resposta, processa-a e envia resposta, caso houver.
+     */
     @Override
     public void run() {
         Object request;
@@ -38,8 +51,24 @@ public class Worker implements Runnable {
                 String requestString = (String) request;
                 if (requestString.equals("list")) {
                     response = socioDAO.list();
-                } else {
-                    response = socioDAO.obter(requestString);
+                } else if (requestString.startsWith("cpf:")) {
+                    try {
+                        response = socioDAO.obter(requestString.replaceFirst("cpf:", ""));
+                    } catch (NoResultException ex) {
+                        response = null;
+                    }
+                } else if (requestString.startsWith("id:")) {
+                    try {
+                        response = socioDAO.obter(Integer.valueOf(requestString.replace("id:", "")));
+                    } catch (NumberFormatException ex) {
+                        response = null;
+                    }
+                } else if (requestString.startsWith("nome:")) {
+                    try {
+                        response = socioDAO.obterPeloNome(requestString.replaceFirst("nome:", ""));
+                    } catch (NoResultException ex) {
+                        response = null;
+                    }
                 }
                 outputStream.flush();
                 outputStream.writeObject(response);

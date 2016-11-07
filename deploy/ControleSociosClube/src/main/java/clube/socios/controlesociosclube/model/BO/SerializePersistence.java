@@ -17,15 +17,26 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 /**
+ * Persistencia local via serializaçao de dados.
  *
  * @author romulo
  * @param <T>
  */
 public class SerializePersistence<T extends Serializable> implements Persistence<T> {
 
+    /**
+     * Colecao de itens que serao manipulados.
+     */
     private Collection<T> items;
+
+    /**
+     * Local padrao para serializaçao da coleçao.
+     */
     private static final String DB_URL = "/data/documents/workspace/ES02P02/deploy/database";
 
+    /**
+     * Constroi a persistencia resgatando as infomaçoes ja existentes.
+     */
     public SerializePersistence() {
         Collection<T> items;
         try {
@@ -41,7 +52,13 @@ public class SerializePersistence<T extends Serializable> implements Persistence
         this.items = items;
     }
 
-    private synchronized void serialize(Collection<T> items) throws IOException {
+    /**
+     * Grava os dados no disco.
+     *
+     * @param items Coleçao de itens que serao persistidos.
+     * @throws IOException
+     */
+    private synchronized final void serialize(Collection<T> items) throws IOException {
         FileOutputStream fileOutputStream = new FileOutputStream(DB_URL);
         ObjectOutputStream objectOutputStream = new ObjectOutputStream(fileOutputStream);
         objectOutputStream.writeObject(items);
@@ -49,7 +66,14 @@ public class SerializePersistence<T extends Serializable> implements Persistence
         fileOutputStream.close();
     }
 
-    private synchronized Collection<T> deserialize() throws IOException, ClassNotFoundException {
+    /**
+     * Resgata os dados do disco.
+     *
+     * @return Retorna a coleçao dos items obtidos.
+     * @throws IOException
+     * @throws ClassNotFoundException
+     */
+    private synchronized final Collection<T> deserialize() throws IOException, ClassNotFoundException {
         FileInputStream fileInputStream = new FileInputStream(DB_URL);
         ObjectInputStream objectInputStream = new ObjectInputStream(fileInputStream);
         Collection<T> items = (Collection<T>) objectInputStream.readObject();
@@ -58,8 +82,14 @@ public class SerializePersistence<T extends Serializable> implements Persistence
         return items;
     }
 
+    /**
+     * Obtem todos os itens existentes na base. Metodo com lock exclusivo para a
+     * mesma instancia.
+     *
+     * @return
+     */
     @Override
-    public synchronized Collection<T> list() {
+    public synchronized final Collection<T> list() {
         try {
             items = deserialize();
         } catch (IOException ex) {
@@ -70,8 +100,13 @@ public class SerializePersistence<T extends Serializable> implements Persistence
         return items;
     }
 
+    /**
+     * Insere um item na base.
+     *
+     * @param t
+     */
     @Override
-    public synchronized void create(T t) {
+    public synchronized final void create(T t) {
         try {
             items = deserialize();
             items.add(t);
@@ -83,8 +118,15 @@ public class SerializePersistence<T extends Serializable> implements Persistence
         }
     }
 
+    /**
+     * Obtem um item na base.
+     *
+     * @param t
+     * @return
+     * @throws ItemNotFoundException
+     */
     @Override
-    public synchronized T retrieve(T t) throws ItemNotFoundException {
+    public synchronized final T retrieve(T t) throws ItemNotFoundException {
         try {
             items = deserialize();
             for (T item : items) {
@@ -100,8 +142,15 @@ public class SerializePersistence<T extends Serializable> implements Persistence
         throw new ItemNotFoundException("Item não encontrado");
     }
 
+    /**
+     * Atualiza um item buscando-o pela chave primaria. A chave primaria devera
+     * ser descrita no metodo equals de cada classe.
+     *
+     * @param t
+     * @throws ItemNotFoundException
+     */
     @Override
-    public synchronized void update(T t) throws ItemNotFoundException {
+    public synchronized final void update(T t) throws ItemNotFoundException {
         try {
             items = deserialize();
             boolean remove = this.items.remove(t);
@@ -117,8 +166,14 @@ public class SerializePersistence<T extends Serializable> implements Persistence
         }
     }
 
+    /**
+     * Remove um objeto.
+     *
+     * @param t
+     * @throws ItemNotFoundException
+     */
     @Override
-    public synchronized void delete(T t) throws ItemNotFoundException {
+    public synchronized final void delete(T t) throws ItemNotFoundException {
         try {
             items = deserialize();
             boolean remove = this.items.remove(t);

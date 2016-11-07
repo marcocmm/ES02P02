@@ -22,11 +22,11 @@ public class SocioDAOTest {
     @Test
     public void testSomeMethod() {
         SocioDAO socioDAO = new SocioDAO();
-        Socio socio1 = new Socio("87", "teste", 0, Sexo.FEMININO, null, null);
+        Socio socio1 = new Socio("87", "teste", "cpf:", Sexo.FEMININO, null, null);
         socioDAO.insert(socio1);
-        Socio socio2 = new Socio("87", "teste", 0, Sexo.FEMININO, null, null);
+        Socio socio2 = new Socio("87", "teste", "cpf:", Sexo.FEMININO, null, null);
         socioDAO.insert(socio2);
-        Socio socio3 = new Socio("87", "teste", 0, Sexo.FEMININO, null, null);
+        Socio socio3 = new Socio("87", "teste", "cpf:", Sexo.FEMININO, null, null);
         socioDAO.insert(socio3);
     }
 

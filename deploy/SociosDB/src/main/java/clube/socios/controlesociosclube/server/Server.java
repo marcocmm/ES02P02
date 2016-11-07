@@ -12,11 +12,19 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 /**
+ * Servidor apto a receber requisiçoes via socket e persisti-las na base de
+ * dados. Nenhuma forma de segurança e provida.
  *
  * @author romulo
  */
 public class Server {
 
+    /**
+     * Inicializa o servidor e deixa-o pronto para receber quantas conexoes
+     * houverem.
+     *
+     * @param args
+     */
     public static void main(String[] args) {
         ServerSocket serverSocket;
 

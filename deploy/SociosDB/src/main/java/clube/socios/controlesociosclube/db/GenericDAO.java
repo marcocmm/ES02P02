@@ -10,10 +10,12 @@ import javax.persistence.EntityManager;
 import javax.persistence.Persistence;
 
 /**
+ * Classe que lida com o Eclipselink, abstraindo as principais açoes do BD.
  *
  * @author romulo
+ * @param <T>
  */
-public class GenericDAO<T> {
+public abstract class GenericDAO<T> {
 
     final EntityManager entityManager;
     final Class clazz;

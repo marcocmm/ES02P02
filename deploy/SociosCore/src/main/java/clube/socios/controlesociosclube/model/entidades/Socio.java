@@ -25,7 +25,7 @@ public class Socio implements Serializable {
     private int idSocio;
     private String nome;
     private final String cpf;
-    private int idade;
+    private String nascimento;
     private Sexo sexo;
     private final Collection<Dependente> dependentes;
     private final Collection<Unidade> unidades;
@@ -40,10 +40,10 @@ public class Socio implements Serializable {
         this.atividades = null;
     }
 
-    public Socio(String cpf, String nome, int idade, Sexo sexo, Collection<Unidade> unidades, Collection<Atividade> atividades) {
+    public Socio(String cpf, String nome, String nascimento, Sexo sexo, Collection<Unidade> unidades, Collection<Atividade> atividades) {
         this.cpf = cpf;
         this.nome = nome;
-        this.idade = idade;
+        this.nascimento = nascimento;
         this.sexo = sexo;
         this.unidades = unidades;
         this.dependentes = new ArrayList<>();
@@ -51,11 +51,11 @@ public class Socio implements Serializable {
         this.atividades = atividades;
     }
 
-    public Socio(String cpf, String nome, int idade, Sexo sexo, Collection<Dependente> dependentes, int unidades, Collection<Mensalidade> mensalidades, Collection<Atividade> atividades) {
+    public Socio(String cpf, String nome, String nascimento, Sexo sexo, Collection<Dependente> dependentes, int unidades, Collection<Mensalidade> mensalidades, Collection<Atividade> atividades) {
         this.idSocio = 1;
         this.cpf = cpf;
         this.nome = nome;
-        this.idade = idade;
+        this.nascimento = nascimento;
         this.sexo = sexo;
         this.dependentes = dependentes;
         this.unidades = new ArrayList<>();
@@ -75,8 +75,12 @@ public class Socio implements Serializable {
         return idSocio;
     }
 
-    public void setIdade(int idade) {
-        this.idade = idade;
+    public String getNascimento() {
+        return nascimento;
+    }
+
+    public void setNascimento(String nascimento) {
+        this.nascimento = nascimento;
     }
 
     public void setSexo(Sexo sexo) {
@@ -85,10 +89,6 @@ public class Socio implements Serializable {
 
     public String getNome() {
         return nome;
-    }
-
-    public int getIdade() {
-        return idade;
     }
 
     public Sexo getSexo() {
