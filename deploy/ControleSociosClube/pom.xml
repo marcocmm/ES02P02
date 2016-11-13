@@ -16,7 +16,7 @@
                         <manifest>
                             <addClasspath>true</addClasspath>
                             <classpathPrefix>lib</classpathPrefix> 
-                            <mainClass>clube.socios.controlesociosclube.model.view.Main</mainClass> 
+                            <mainClass>clube.socios.controlesociosclube.model.view.CRUDSocio</mainClass> 
                         </manifest>
                         <manifestEntries>
                             <Class-Path>lib/</Class-Path>

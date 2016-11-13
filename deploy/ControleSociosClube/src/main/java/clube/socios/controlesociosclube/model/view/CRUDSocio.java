@@ -9,6 +9,7 @@ import clube.socios.controlesociosclube.model.BO.ItemAlreadyExistException;
 import clube.socios.controlesociosclube.model.BO.ItemNotFoundException;
 import clube.socios.controlesociosclube.model.BO.ItemNotFoundHereException;
 import clube.socios.controlesociosclube.model.BO.SocioBO;
+import clube.socios.controlesociosclube.model.DAO.Serviços.SincronizaDados;
 import clube.socios.controlesociosclube.model.entidades.Atividade;
 import clube.socios.controlesociosclube.model.entidades.Sexo;
 import clube.socios.controlesociosclube.model.entidades.Socio;
@@ -19,6 +20,9 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
+import java.util.Timer;
+import java.util.TimerTask;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
@@ -141,8 +145,40 @@ public class CRUDSocio extends JFrame {
             @Override
             public void actionPerformed(ActionEvent e) {
                 Collection<Socio> listar = SocioBO.listar();
+                JList jList = new JList(listar.toArray());
+                GUIListagem guiListagem = new GUIListagem((List<Socio>) listar);
             }
         });
+
+        JButton dependentesButton = new JButton("Dependentes");
+        dependentesButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                String cpf = cpfTextField.getText();
+                if (cpf.isEmpty()) {
+                    JOptionPane.showMessageDialog(rootPane, "Insira corretamente os dados", "Busca", JOptionPane.ERROR_MESSAGE);
+                    return;
+                }
+                try {
+                    Socio obterSocio = SocioBO.obterSocio(cpf);
+                    idTextField.setText(String.valueOf(obterSocio.getIdSocio()));
+                    nomeTextField.setText(obterSocio.getNome());
+                    cpfTextField.setText(obterSocio.getCpf());
+                    nascimentoTextField.setText(obterSocio.getNascimento());
+                    sexoTextField.setText(obterSocio.getSexo().name());
+
+                    DependentesGUI dependentesGUI = new DependentesGUI(obterSocio);
+
+                } catch (ItemNotFoundException ex) {
+                    JOptionPane.showMessageDialog(rootPane, "Socio nao encontrado", "Buscar", JOptionPane.ERROR_MESSAGE);
+                } catch (ItemNotFoundHereException ex) {
+                    JOptionPane.showMessageDialog(rootPane, "Conxao perdida\nSocio nao encontrado localmente", "Buscar", JOptionPane.ERROR_MESSAGE);
+                }
+            }
+        });
+
+        JButton checkinSocioButton = new JButton("Check-in");
+        JButton pagarMensalidadeButton = new JButton("Mensalidades");
 
         JToolBar toolbar = new JToolBar("Oções");
         toolbar.add(buscarButton);
@@ -150,14 +186,29 @@ public class CRUDSocio extends JFrame {
         toolbar.add(bloquearButton);
         toolbar.add(atualizarButton);
         toolbar.add(listarButton);
+        toolbar.add(dependentesButton);
+        toolbar.add(checkinSocioButton);
+        toolbar.add(pagarMensalidadeButton);
 
         add(toolbar, BorderLayout.NORTH);
         add(center, BorderLayout.CENTER);
-        setTitle("Gerenciar Socios");
+        setTitle("Controle de Socios do Clube");
         setResizable(false);
         setSize(700, 700);
-        setDefaultCloseOperation(DISPOSE_ON_CLOSE);
+        setDefaultCloseOperation(EXIT_ON_CLOSE);
         setVisible(true);
+    }
+
+    public static void main(String[] args) {
+        SincronizaDados sincronizaDados = new SincronizaDados();
+        Timer timer = new Timer();
+        timer.schedule(new TimerTask() {
+            @Override
+            public void run() {
+                sincronizaDados.updateSocios();
+            }
+        }, 0, 60000);
+        new CRUDSocio();
     }
 
 }

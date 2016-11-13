@@ -95,6 +95,10 @@ public class Socio implements Serializable {
         return sexo;
     }
 
+    public void addDependente(Dependente dependente){
+        this.dependentes.add(dependente);
+    }
+    
     public Collection<Dependente> getDependentes() {
         return dependentes;
     }
