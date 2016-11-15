@@ -5,11 +5,13 @@
  */
 package clube.socios.controlesociosclube.model.entidades;
 
+import java.io.Serializable;
+
 /**
  *
  * @author romulo
  */
-public class Dependente {
+public class Dependente implements Serializable {
 
     private String nome;
     private int idade;
