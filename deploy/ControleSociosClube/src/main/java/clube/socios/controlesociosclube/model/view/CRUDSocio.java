@@ -111,7 +111,6 @@ public class CRUDSocio extends JFrame {
             }
         });
 
-        JButton bloquearButton = new JButton("Bloquear");
         JButton atualizarButton = new JButton("Atualizar");
         atualizarButton.addActionListener(new ActionListener() {
             @Override
@@ -167,7 +166,7 @@ public class CRUDSocio extends JFrame {
                     nascimentoTextField.setText(obterSocio.getNascimento());
                     sexoTextField.setText(obterSocio.getSexo().name());
 
-                    DependentesGUI dependentesGUI = new DependentesGUI(obterSocio);
+                    new DependentesGUI(obterSocio);
 
                 } catch (ItemNotFoundException ex) {
                     JOptionPane.showMessageDialog(rootPane, "Socio nao encontrado", "Buscar", JOptionPane.ERROR_MESSAGE);
@@ -178,16 +177,17 @@ public class CRUDSocio extends JFrame {
         });
 
         JButton checkinSocioButton = new JButton("Check-in");
+        JButton checkoutSocioButton = new JButton("Check-out");
         JButton pagarMensalidadeButton = new JButton("Mensalidades");
 
         JToolBar toolbar = new JToolBar("Oções");
         toolbar.add(buscarButton);
         toolbar.add(cadastrarButton);
-        toolbar.add(bloquearButton);
         toolbar.add(atualizarButton);
         toolbar.add(listarButton);
         toolbar.add(dependentesButton);
         toolbar.add(checkinSocioButton);
+        toolbar.add(checkoutSocioButton);
         toolbar.add(pagarMensalidadeButton);
 
         add(toolbar, BorderLayout.NORTH);

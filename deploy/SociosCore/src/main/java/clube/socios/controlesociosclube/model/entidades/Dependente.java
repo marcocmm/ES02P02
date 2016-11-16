@@ -41,4 +41,16 @@ public class Dependente implements Serializable {
         return sexo;
     }
 
+    @Override
+    public boolean equals(Object obj) {
+        if (!getClass().equals(obj.getClass())) {
+            return false;
+        }
+        Dependente dependente = (Dependente) obj;
+        if (!nome.equals(dependente.nome)) {
+            return false;
+        }
+        return true;
+    }
+
 }

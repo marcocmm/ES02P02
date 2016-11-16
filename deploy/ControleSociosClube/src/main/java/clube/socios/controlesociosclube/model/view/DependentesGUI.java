@@ -5,7 +5,6 @@
  */
 package clube.socios.controlesociosclube.model.view;
 
-import clube.socios.controlesociosclube.model.BO.ItemAlreadyExistException;
 import clube.socios.controlesociosclube.model.BO.ItemNotFoundException;
 import clube.socios.controlesociosclube.model.BO.ItemNotFoundHereException;
 import clube.socios.controlesociosclube.model.BO.SocioBO;
@@ -17,8 +16,6 @@ import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.Collection;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
@@ -39,15 +36,15 @@ public class DependentesGUI extends JFrame {
 
         String[] colunas = {"Nome", "Sexo", "Idade"};
 
-        Object[][] dados = new Object[10][3];
+        String[][] dados = new String[10][3];
 
         {
             Collection<Dependente> dependentes = socio.getDependentes();
             int i = 0;
             for (Dependente dependente : dependentes) {
                 dados[i][0] = dependente.getNome();
-                dados[i][1] = dependente.getSexo();
-                dados[i][2] = dependente.getIdade();
+                dados[i][1] = dependente.getSexo().name();
+                dados[i][2] = String.valueOf(dependente.getIdade());
                 i++;
             }
         }
@@ -80,12 +77,13 @@ public class DependentesGUI extends JFrame {
                 try {
                     Dependente dependente = new Dependente();
                     dependente.setNome(nome);
-                    dependente.setSexo(sexo.equals("MASCULINO") ? Sexo.FEMININO : Sexo.FEMININO);
+                    dependente.setSexo(sexo.equals("MASCULINO") ? Sexo.MASCULINO : Sexo.FEMININO);
                     dependente.setIdade(Integer.valueOf(idade));
 
                     socio.addDependente(dependente);
 
                     SocioBO.atualizarSocio(socio);
+                    JOptionPane.showMessageDialog(rootPane, "Dependente incluido");
                 } catch (ItemNotFoundException ex) {
                     JOptionPane.showMessageDialog(rootPane, "Socio nao encontrado", "Atualizar", JOptionPane.ERROR_MESSAGE);
                 } catch (ItemNotFoundHereException ex) {
@@ -114,7 +112,10 @@ public class DependentesGUI extends JFrame {
 
                 try {
                     SocioBO.atualizarSocio(socio);
-                    defaultTableModel.removeRow(selectedRow);
+                    defaultTableModel.setValueAt("", selectedRow, 0);
+                    defaultTableModel.setValueAt("", selectedRow, 1);
+                    defaultTableModel.setValueAt("", selectedRow, 2);
+                    JOptionPane.showMessageDialog(rootPane, "Dependente excluido");
                 } catch (ItemNotFoundException ex) {
                     JOptionPane.showMessageDialog(rootPane, "Socio nao encontrado", "Atualizar", JOptionPane.ERROR_MESSAGE);
                     socio.addDependente(dependente);
@@ -128,10 +129,10 @@ public class DependentesGUI extends JFrame {
         JToolBar toolbar = new JToolBar("Oções");
         toolbar.add(cadastrarButton);
         toolbar.add(removerButton);
-        
+
         add(toolbar, BorderLayout.NORTH);
         add(center, BorderLayout.CENTER);
-        
+
         setTitle("Gerenciar Dependentes");
         setResizable(false);
         setSize(500, 120);
