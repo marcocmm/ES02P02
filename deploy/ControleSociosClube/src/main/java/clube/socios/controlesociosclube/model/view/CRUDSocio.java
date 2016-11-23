@@ -225,8 +225,8 @@ public class CRUDSocio extends JFrame {
         add(toolbar, BorderLayout.NORTH);
         add(center, BorderLayout.CENTER);
         setTitle("Controle de Socios do Clube");
-        setResizable(false);
-        setSize(700, 700);
+        setResizable(true);
+        setSize(700, 400);
         setDefaultCloseOperation(EXIT_ON_CLOSE);
         setVisible(true);
     }

@@ -32,7 +32,7 @@ public class SerializePersistence<T extends Serializable> implements Persistence
     /**
      * Local padrao para serializaçao da coleçao.
      */
-    private static final String DB_URL = "/data/documents/workspace/ES02P02/deploy/database";
+    private static final String DB_URL = "database";
 
     /**
      * Constroi a persistencia resgatando as infomaçoes ja existentes.

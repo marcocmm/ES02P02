@@ -134,8 +134,8 @@ public class DependentesGUI extends JFrame {
         add(center, BorderLayout.CENTER);
 
         setTitle("Gerenciar Dependentes");
-        setResizable(false);
-        setSize(500, 120);
+        setResizable(true);
+        setSize(500, 300);
         setDefaultCloseOperation(DISPOSE_ON_CLOSE);
         setVisible(true);
     }

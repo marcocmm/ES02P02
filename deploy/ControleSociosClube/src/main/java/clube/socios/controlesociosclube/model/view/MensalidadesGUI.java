@@ -114,8 +114,8 @@ public class MensalidadesGUI extends JFrame {
         add(center, BorderLayout.CENTER);
 
         setTitle("Mensalidades");
-        setResizable(false);
-        setSize(500, 120);
+        setResizable(true);
+        setSize(500, 300);
         setDefaultCloseOperation(DISPOSE_ON_CLOSE);
         setVisible(true);
     }
