@@ -30,7 +30,8 @@ public class Socio implements Serializable {
     private final Collection<Dependente> dependentes;
     private final Collection<Unidade> unidades;
     private final Collection<Mensalidade> mensalidades;
-    private final Collection<Atividade> atividades;
+    private Collection<Atividade> atividades;
+    private final Collection<Checkin> checkins;
 
     protected Socio() {
         this.cpf = null;
@@ -38,6 +39,7 @@ public class Socio implements Serializable {
         this.unidades = null;
         this.mensalidades = null;
         this.atividades = null;
+        this.checkins = null;
     }
 
     public Socio(String cpf, String nome, String nascimento, Sexo sexo, Collection<Unidade> unidades, Collection<Atividade> atividades) {
@@ -49,6 +51,7 @@ public class Socio implements Serializable {
         this.dependentes = new ArrayList<>();
         this.mensalidades = new ArrayList<>();
         this.atividades = atividades;
+        this.checkins = new ArrayList<>();
     }
 
     public Socio(String cpf, String nome, String nascimento, Sexo sexo, Collection<Dependente> dependentes, int unidades, Collection<Mensalidade> mensalidades, Collection<Atividade> atividades) {
@@ -61,6 +64,25 @@ public class Socio implements Serializable {
         this.unidades = new ArrayList<>();
         this.mensalidades = mensalidades;
         this.atividades = atividades;
+        this.checkins = new ArrayList<>();
+    }
+
+    public Collection<Atividade> getAtividades() {
+        return atividades;
+    }
+
+    public void addAtividade(Atividade atividade) {
+        if (!this.atividades.contains(atividade)) {
+            this.atividades.add(atividade);
+        }
+    }
+
+    public void setAtividades(Collection<Atividade> atividades) {
+        this.atividades = atividades;
+    }
+
+    public void addCheckin(Checkin checkin) {
+        this.checkins.add(checkin);
     }
 
     public String getCpf() {

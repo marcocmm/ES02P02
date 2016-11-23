@@ -5,6 +5,7 @@
  */
 package clube.socios.controlesociosclube.model.DAO;
 
+import clube.socios.controlesociosclube.model.entidades.Checkin;
 import clube.socios.controlesociosclube.model.entidades.Unidade;
 import java.io.Serializable;
 import java.util.ArrayList;

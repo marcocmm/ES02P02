@@ -9,6 +9,7 @@ import clube.socios.controlesociosclube.model.BO.ItemAlreadyExistException;
 import clube.socios.controlesociosclube.model.BO.ItemNotFoundException;
 import clube.socios.controlesociosclube.model.BO.ItemNotFoundHereException;
 import clube.socios.controlesociosclube.model.BO.SocioBO;
+import clube.socios.controlesociosclube.model.entidades.Checkin;
 import clube.socios.controlesociosclube.model.DAO.Serviços.SincronizaDados;
 import clube.socios.controlesociosclube.model.entidades.Atividade;
 import clube.socios.controlesociosclube.model.entidades.Sexo;
@@ -179,7 +180,40 @@ public class CRUDSocio extends JFrame {
         checkinSocioButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                
+                String cpf = cpfTextField.getText();
+                if (cpf.isEmpty()) {
+                    JOptionPane.showMessageDialog(rootPane, "Insira corretamente os dados", "Busca", JOptionPane.ERROR_MESSAGE);
+                    return;
+                }
+                try {
+                    Socio obterSocio = SocioBO.obterSocio(cpf);
+                    idTextField.setText(String.valueOf(obterSocio.getIdSocio()));
+                    nomeTextField.setText(obterSocio.getNome());
+                    cpfTextField.setText(obterSocio.getCpf());
+                    nascimentoTextField.setText(obterSocio.getNascimento());
+                    sexoTextField.setText(obterSocio.getSexo().name());
+
+                    String localStr = JOptionPane.showInputDialog(rootPane, "Area, Cidade");
+                    if (localStr == null) {
+                        return;
+                    }
+                    String[] split = localStr.split(",");
+                    if (split.length != 2) {
+                        return;
+                    }
+                    Unidade unidade = new Unidade(split[0], split[1]);
+
+                    Checkin checkin = new Checkin();
+                    checkin.setUnidade(unidade);
+
+                    obterSocio.addCheckin(checkin);
+                    SocioBO.atualizarSocio(obterSocio);
+
+                } catch (ItemNotFoundException ex) {
+                    JOptionPane.showMessageDialog(rootPane, "Socio nao encontrado", "Buscar", JOptionPane.ERROR_MESSAGE);
+                } catch (ItemNotFoundHereException ex) {
+                    JOptionPane.showMessageDialog(rootPane, "Conxao perdida\nSocio nao encontrado localmente", "Buscar", JOptionPane.ERROR_MESSAGE);
+                }
             }
         });
 
@@ -211,6 +245,47 @@ public class CRUDSocio extends JFrame {
         });
 
         JButton atividadesMensalidadeButton = new JButton("Atividades");
+        atividadesMensalidadeButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                String cpf = cpfTextField.getText();
+                if (cpf.isEmpty()) {
+                    JOptionPane.showMessageDialog(rootPane, "Insira corretamente os dados", "Busca", JOptionPane.ERROR_MESSAGE);
+                    return;
+                }
+                try {
+                    Socio obterSocio = SocioBO.obterSocio(cpf);
+                    idTextField.setText(String.valueOf(obterSocio.getIdSocio()));
+                    nomeTextField.setText(obterSocio.getNome());
+                    cpfTextField.setText(obterSocio.getCpf());
+                    nascimentoTextField.setText(obterSocio.getNascimento());
+                    sexoTextField.setText(obterSocio.getSexo().name());
+
+                    Collection<Atividade> atividades = obterSocio.getAtividades();
+                    String atividadesStr = atividades.toString();
+                    atividadesStr = atividadesStr.substring(1, atividadesStr.length() - 1);
+                    String novasAtividades = JOptionPane.showInputDialog(rootPane, "Insira as atividades CSV", atividadesStr);
+                    if (novasAtividades == null) {
+                        return;
+                    }
+                    obterSocio.setAtividades(new ArrayList<>());
+                    String[] split = novasAtividades.replace(" ", "").split(",");
+                    for (String string : split) {
+                        try {
+                            Atividade valueOf = Atividade.valueOf(string.toUpperCase());
+                            obterSocio.addAtividade(valueOf);
+                        } catch (IllegalArgumentException ex) {
+                        }
+                    }
+                    SocioBO.atualizarSocio(obterSocio);
+
+                } catch (ItemNotFoundException ex) {
+                    JOptionPane.showMessageDialog(rootPane, "Socio nao encontrado", "Buscar", JOptionPane.ERROR_MESSAGE);
+                } catch (ItemNotFoundHereException ex) {
+                    JOptionPane.showMessageDialog(rootPane, "Conxao perdida\nSocio nao encontrado localmente", "Buscar", JOptionPane.ERROR_MESSAGE);
+                }
+            }
+        });
 
         JToolBar toolbar = new JToolBar("Oções");
         toolbar.add(buscarButton);

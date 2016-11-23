@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package clube.socios.controlesociosclube.model.DAO;
+package clube.socios.controlesociosclube.model.entidades;
 
 import java.io.Serializable;
 
@@ -14,6 +14,7 @@ import java.io.Serializable;
 public class Checkin implements Serializable {
 
     private int quantidadeDeCheckin;
+    private Unidade unidade;
 
     public void addQuantidadeDeCheckin() {
         quantidadeDeCheckin++;
@@ -21,6 +22,14 @@ public class Checkin implements Serializable {
 
     public int getQuantidadeDeCheckin() {
         return quantidadeDeCheckin;
+    }
+
+    public void setUnidade(Unidade unidade) {
+        this.unidade = unidade;
+    }
+
+    public Unidade getUnidade() {
+        return unidade;
     }
 
 }
