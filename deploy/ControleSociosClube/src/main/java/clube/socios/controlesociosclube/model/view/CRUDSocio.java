@@ -144,8 +144,7 @@ public class CRUDSocio extends JFrame {
             @Override
             public void actionPerformed(ActionEvent e) {
                 Collection<Socio> listar = SocioBO.listar();
-                JList jList = new JList(listar.toArray());
-                GUIListagem guiListagem = new GUIListagem((List<Socio>) listar);
+                new GUIListagem((List<Socio>) listar);
             }
         });
 
@@ -177,7 +176,13 @@ public class CRUDSocio extends JFrame {
         });
 
         JButton checkinSocioButton = new JButton("Check-in");
-        
+        checkinSocioButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                
+            }
+        });
+
         JButton pagarMensalidadeButton = new JButton("Mensalidades");
         pagarMensalidadeButton.addActionListener(new ActionListener() {
             @Override
