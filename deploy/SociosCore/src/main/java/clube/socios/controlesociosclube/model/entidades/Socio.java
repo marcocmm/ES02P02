@@ -118,6 +118,10 @@ public class Socio implements Serializable {
         return mensalidades;
     }
 
+    public void addMensalidade(Mensalidade mensalidade) {
+        this.mensalidades.add(mensalidade);
+    }
+
     @Override
     public boolean equals(Object obj) {
         if (obj == null) {

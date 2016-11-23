@@ -58,12 +58,14 @@ public class SerializePersistence<T extends Serializable> implements Persistence
      * @param items Coleçao de itens que serao persistidos.
      * @throws IOException
      */
-    private synchronized final void serialize(Collection<T> items) throws IOException {
-        FileOutputStream fileOutputStream = new FileOutputStream(DB_URL);
-        ObjectOutputStream objectOutputStream = new ObjectOutputStream(fileOutputStream);
-        objectOutputStream.writeObject(items);
-        objectOutputStream.close();
-        fileOutputStream.close();
+    private final void serialize(Collection<T> items) throws IOException {
+        synchronized (SerializePersistence.class) {
+            FileOutputStream fileOutputStream = new FileOutputStream(DB_URL);
+            ObjectOutputStream objectOutputStream = new ObjectOutputStream(fileOutputStream);
+            objectOutputStream.writeObject(items);
+            objectOutputStream.close();
+            fileOutputStream.close();
+        }
     }
 
     /**
@@ -73,7 +75,7 @@ public class SerializePersistence<T extends Serializable> implements Persistence
      * @throws IOException
      * @throws ClassNotFoundException
      */
-    private synchronized final Collection<T> deserialize() throws IOException, ClassNotFoundException {
+    private final Collection<T> deserialize() throws IOException, ClassNotFoundException {
         FileInputStream fileInputStream = new FileInputStream(DB_URL);
         ObjectInputStream objectInputStream = new ObjectInputStream(fileInputStream);
         Collection<T> items = (Collection<T>) objectInputStream.readObject();
@@ -89,7 +91,7 @@ public class SerializePersistence<T extends Serializable> implements Persistence
      * @return
      */
     @Override
-    public synchronized final Collection<T> list() {
+    public final Collection<T> list() {
         try {
             items = deserialize();
         } catch (IOException ex) {
@@ -106,15 +108,17 @@ public class SerializePersistence<T extends Serializable> implements Persistence
      * @param t
      */
     @Override
-    public synchronized final void create(T t) {
-        try {
-            items = deserialize();
-            items.add(t);
-            serialize(items);
-        } catch (IOException ex) {
-            Logger.getLogger(SerializePersistence.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (ClassNotFoundException ex) {
-            Logger.getLogger(SerializePersistence.class.getName()).log(Level.SEVERE, null, ex);
+    public final void create(T t) {
+        synchronized (SerializePersistence.class) {
+            try {
+                items = deserialize();
+                items.add(t);
+                serialize(items);
+            } catch (IOException ex) {
+                Logger.getLogger(SerializePersistence.class.getName()).log(Level.SEVERE, null, ex);
+            } catch (ClassNotFoundException ex) {
+                Logger.getLogger(SerializePersistence.class.getName()).log(Level.SEVERE, null, ex);
+            }
         }
     }
 
@@ -126,7 +130,7 @@ public class SerializePersistence<T extends Serializable> implements Persistence
      * @throws ItemNotFoundException
      */
     @Override
-    public synchronized final T retrieve(T t) throws ItemNotFoundException {
+    public final T retrieve(T t) throws ItemNotFoundException {
         try {
             items = deserialize();
             for (T item : items) {
@@ -150,19 +154,21 @@ public class SerializePersistence<T extends Serializable> implements Persistence
      * @throws ItemNotFoundException
      */
     @Override
-    public synchronized final void update(T t) throws ItemNotFoundException {
-        try {
-            items = deserialize();
-            boolean remove = this.items.remove(t);
-            if (!remove) {
-                throw new ItemNotFoundException("Item não encontrado");
+    public final void update(T t) throws ItemNotFoundException {
+        synchronized (SerializePersistence.class) {
+            try {
+                items = deserialize();
+                boolean remove = this.items.remove(t);
+                if (!remove) {
+                    throw new ItemNotFoundException("Item não encontrado");
+                }
+                this.items.add(t);
+                serialize(items);
+            } catch (IOException ex) {
+                Logger.getLogger(SerializePersistence.class.getName()).log(Level.SEVERE, null, ex);
+            } catch (ClassNotFoundException ex) {
+                Logger.getLogger(SerializePersistence.class.getName()).log(Level.SEVERE, null, ex);
             }
-            this.items.add(t);
-            serialize(items);
-        } catch (IOException ex) {
-            Logger.getLogger(SerializePersistence.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (ClassNotFoundException ex) {
-            Logger.getLogger(SerializePersistence.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 
@@ -173,18 +179,20 @@ public class SerializePersistence<T extends Serializable> implements Persistence
      * @throws ItemNotFoundException
      */
     @Override
-    public synchronized final void delete(T t) throws ItemNotFoundException {
-        try {
-            items = deserialize();
-            boolean remove = this.items.remove(t);
-            if (!remove) {
-                throw new ItemNotFoundException("Item não encontrado");
+    public final void delete(T t) throws ItemNotFoundException {
+        synchronized (SerializePersistence.class) {
+            try {
+                items = deserialize();
+                boolean remove = this.items.remove(t);
+                if (!remove) {
+                    throw new ItemNotFoundException("Item não encontrado");
+                }
+                serialize(items);
+            } catch (IOException ex) {
+                Logger.getLogger(SerializePersistence.class.getName()).log(Level.SEVERE, null, ex);
+            } catch (ClassNotFoundException ex) {
+                Logger.getLogger(SerializePersistence.class.getName()).log(Level.SEVERE, null, ex);
             }
-            serialize(items);
-        } catch (IOException ex) {
-            Logger.getLogger(SerializePersistence.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (ClassNotFoundException ex) {
-            Logger.getLogger(SerializePersistence.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 

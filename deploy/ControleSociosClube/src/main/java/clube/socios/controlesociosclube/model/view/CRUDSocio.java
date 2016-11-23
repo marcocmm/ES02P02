@@ -177,8 +177,35 @@ public class CRUDSocio extends JFrame {
         });
 
         JButton checkinSocioButton = new JButton("Check-in");
-        JButton checkoutSocioButton = new JButton("Check-out");
+        
         JButton pagarMensalidadeButton = new JButton("Mensalidades");
+        pagarMensalidadeButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                String cpf = cpfTextField.getText();
+                if (cpf.isEmpty()) {
+                    JOptionPane.showMessageDialog(rootPane, "Insira corretamente os dados", "Busca", JOptionPane.ERROR_MESSAGE);
+                    return;
+                }
+                try {
+                    Socio obterSocio = SocioBO.obterSocio(cpf);
+                    idTextField.setText(String.valueOf(obterSocio.getIdSocio()));
+                    nomeTextField.setText(obterSocio.getNome());
+                    cpfTextField.setText(obterSocio.getCpf());
+                    nascimentoTextField.setText(obterSocio.getNascimento());
+                    sexoTextField.setText(obterSocio.getSexo().name());
+
+                    new MensalidadesGUI(obterSocio);
+
+                } catch (ItemNotFoundException ex) {
+                    JOptionPane.showMessageDialog(rootPane, "Socio nao encontrado", "Buscar", JOptionPane.ERROR_MESSAGE);
+                } catch (ItemNotFoundHereException ex) {
+                    JOptionPane.showMessageDialog(rootPane, "Conxao perdida\nSocio nao encontrado localmente", "Buscar", JOptionPane.ERROR_MESSAGE);
+                }
+            }
+        });
+
+        JButton atividadesMensalidadeButton = new JButton("Atividades");
 
         JToolBar toolbar = new JToolBar("Oções");
         toolbar.add(buscarButton);
@@ -187,8 +214,8 @@ public class CRUDSocio extends JFrame {
         toolbar.add(listarButton);
         toolbar.add(dependentesButton);
         toolbar.add(checkinSocioButton);
-        toolbar.add(checkoutSocioButton);
         toolbar.add(pagarMensalidadeButton);
+        toolbar.add(atividadesMensalidadeButton);
 
         add(toolbar, BorderLayout.NORTH);
         add(center, BorderLayout.CENTER);

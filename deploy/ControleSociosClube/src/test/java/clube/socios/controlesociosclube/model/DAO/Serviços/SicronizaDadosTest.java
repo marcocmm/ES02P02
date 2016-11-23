@@ -27,7 +27,6 @@ public class SicronizaDadosTest {
         timer.schedule(new TimerTask() {
             @Override
             public void run() {
-                sincronizaDados.updateSocios();
             }
         }, 0, 2000);
 

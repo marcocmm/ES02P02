@@ -5,13 +5,14 @@
  */
 package clube.socios.controlesociosclube.model.entidades;
 
+import java.io.Serializable;
 import java.util.Date;
 
 /**
  *
  * @author romulo
  */
-public class Mensalidade {
+public class Mensalidade implements Serializable {
 
     private int idMensalidade;
     private Date dataVencimento;

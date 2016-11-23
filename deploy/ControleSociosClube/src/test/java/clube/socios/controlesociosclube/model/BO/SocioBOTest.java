@@ -29,7 +29,7 @@ public class SocioBOTest {
             Logger.getLogger(CRUDSocio.class.getName()).log(Level.SEVERE, null, ex);
             Logger.getGlobal().log(Level.INFO, "item not found");
         } catch (ItemNotFoundHereException ex) {
-            Logger.getGlobal().log(Level.SEVERE, "QQtaconteseno?");
+            Logger.getGlobal().log(Level.SEVERE, "item nao encontrado");
         }
     }
 
